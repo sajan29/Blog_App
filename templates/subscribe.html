@@ -1,0 +1,80 @@
+<div class="container">
+
+  <!-- Trigger the modal with a button -->
+  <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Subscribe to RSS Feed</button>
+
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title"></h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form id="frm" action="subscribe/" method="post">{% csrf_token %}
+          	<div class="form-group">
+      				<label for="usr">Enter your email:</label>
+      				<input type="text" name="usr" class="form-control" placeholder="example@mail.com" id="usr"/>
+              <button id="sub" type="submit" class="btn btn-primary">Subscribe </button>
+  			    </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script src=" http://cdn.jsdelivr.net/jquery.cookie/1.4.1/jquery.cookie.min.js "></script>
+  <script>
+     var csrftoken = $.cookie('csrftoken');
+     function csrfSafeMethod(method) {
+     // these HTTP methods do not require CSRF protection
+          return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+     $.ajaxSetup({
+       beforeSend: function(xhr, settings) {
+       if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+          xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+       }
+     });
+     $(document).ready(function(){
+      console.log("ready bitch");
+        $("#frm").submit(function(e){
+          console.log("al;wdknklabsfjsdbvjsdbvjkbvjkvsbdjvbhsdb");
+          var form=$(this);
+          console.log(form.serialize());
+          $.ajax({
+            type:"POST",
+            url:"/subscribe/",
+            data:form.serialize(),
+            success:function(data){
+                console.log("---------------------------------beti")
+                if(data["status"]=="ok")
+                {
+                  alert("Subscribed successfully");
+                }
+                else
+                {
+                  alert(data["message"]);
+                }
+            }
+
+
+          });
+          e.preventDefault();
+        });
+       });
+    
+  </script>
